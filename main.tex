@@ -34,8 +34,6 @@
 \usepackage{url} % url挿入
 %\usepackage[ipaex]{pxchfon} %文書内の和文フォントの指定(ipaexフォントが指定されている, 無くても大丈夫そう)
 %\usepackage[uplatex, deluxe]{otf}
-% \usepackage{color}
-% \usepackage{xcolor} % 文字の色付けができる(color の上位互換?)
 
 %% --- ページ設定 --- %%
 % \usepackage[top=30truemm,bottom=30truemm,left=30truemm,right=20truemm]{geometry} % 余白設定
@@ -77,8 +75,16 @@ b2181920 新井田 響}
 \tableofcontents
 \thispagestyle{empty}
 
-\input{chapter/chapter1}
+\input{chapter/chapter1} % 背景目的
+\input{chapter/chapter2} % 先行研究位置づけ
+\input{chapter/chapter3} % 
+\input{chapter/chapter4} % 機械学習
 
+\begin{comment}
+label命名規則
+1. c[n] : 第n章のラベル
+2. c[m]s[n] : 第m章第n節のラベル
+\end{comment}
 
 
 \end{document}
