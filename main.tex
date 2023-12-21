@@ -2,7 +2,7 @@
 
 %% ----- packages ----- %%
 % --- 図表 --- %
-%\usepackage{plautopatch}
+\usepackage{plautopatch}
 \usepackage[dvipdfmx]{graphicx, xcolor, pict2e} % geometory: 余白設定 graphicx: 画像挿入 xcolor: 文字の色付け pict2e: 図が描ける
 \usepackage{here} % 図の配置を指定できる
 \usepackage{float} % here と同じらしい
@@ -27,14 +27,13 @@
 \usepackage{cite} % 参考文献リスト"bibitem"の参照
 \usepackage{times} % フォント "times" に指定
 \usepackage{mathptmx} % 数式も含めてフォント "times" に指定
-%\usepackage{amsmath,amssymb,amsfonts} % 数式をきれいに書ける。amsfontsはフォントを指定しているが、mathptmxでフォント指定されているため、機能していない。
-%\usepackage[ipaex]{pxchfon} %文書内の和文フォントの指定(ipaexフォントが指定されている, 無くても大丈夫そう)
+\usepackage{amsmath,amssymb,amsfonts} % 数式をきれいに書ける。amsfontsはフォントを指定しているが、mathptmxでフォント指定されているため、機能していない。
 \usepackage{algorithmic} % アルゴリズム(疑似コード)を書ける
 \usepackage{textcomp} % 特殊文字を書ける
 \usepackage{comment} % コメントアウト
 \usepackage{url} % url挿入
-\usepackage{uplatex}
-\usepackage{deluxe}{otf}
+%\usepackage[ipaex]{pxchfon} %文書内の和文フォントの指定(ipaexフォントが指定されている, 無くても大丈夫そう)
+%\usepackage[uplatex, deluxe]{otf}
 % \usepackage{color}
 % \usepackage{xcolor} % 文字の色付けができる(color の上位互換?)
 
@@ -74,39 +73,12 @@ A Study on the Reproduction of Japanese Language Learning for Elementary School 
 b2181920 新井田 響}
 \date{\today}
 \maketitle
-% \tableofcontents
+
+\tableofcontents
+\thispagestyle{empty}
+
+\input{chapter/chapter1}
 
 
 
-\chapter{序論\label{cI}}
-\pagenumbering{arabic}
-
-\section{背景}
-人間が日常的に使用する言葉（自然言語）をコンピュータで処理する自然言語処理はコンピュータの処理能力の進歩に伴い，処理性能も向上した．
-特に，2018年に発表された Bidirectional Encoder Representations from Transformers (以下，BERT)は，Googleが発表した自然言語処理アルゴリズムの一つで，これまでに発表されてきた自然言語処理モデルとは異なり，一定の文脈を理解することが可能とされている．
-BERTは事前学習とFine Tuningの2段階の学習を行うことでモデルを生成する．
-特に，事前学習ではラベル付きデータを必要としないことから，大量の学習データを扱いやすくなっている．
-Fine Tuningでは，特定のタスクに重点をおいたラベル付きデータを学習させる。
-これらを行うことで，学習した内容に関連する領域内で，文章単位での読解に関わる問題を解くことが可能になる．
-これにより，単文同士の接続部分について，一定の精度での認識が可能になった．
-成松らの研究によれば，高校までの語彙や文章理解といった知識量を提供することで，センター試験の英語の不要文除去問題で高い精度を出している[1]．\par
-一方，人間の学習の観点では．BERTの研究と同様に中等教育の知識量の多い教育課程を中心に研究が進められている．
-鈴木の研究によると，国語教育課程では、発達段階に応じて学習者が課題で作成する一文章あたりの語彙量が増える傾向が示された[2]．
-また，澤口らは，国語の読解におけるつまずきは読書量の低下，語彙力不足，意欲にあることを示唆している[3]．
-一連の研究は，人間の学習もBERT同様に，多くの文章に慣れ（BERTの事前学習）、語彙の活用経験をこなすこと（BERTのFine Tuning）の重要性を示唆している．
-
-\section{目的}
-本研究では，人間の学びと人工知能の学習ロジックの類似性の観点に基づき，教科としての国語における人間の学習活動を人工知能に再現させ，人工知能の日本語読解能力が向上するかを明らかにすることを目的とする．
-文章中の単語を穴埋めする問題を解かせ，正答数と正答した品詞の種類を用いて，本研究で作成したモデルの評価を行う．
-小学校全学年の教科書に掲載されている文章を学習データとして，オリジナルの事前学習モデルを構築する．
-既存の事前学習済みモデルと本研究で作成したモデルとの差異を分析し，将来的には国語の文章問題の自動添削への応用を目指す．
-
-\section{構成}
-本論文の構成について述べる.
-第2章では，関連研究について触れ、本研究の位置づけについて述べる.
-第3章では，本研究で使用した基盤技術について述べる．特に，研究の要になる BERT について述べる．
-第4章では，作成した事前学習モデルについて述べ，既存の事前学習モデルを比較するための評価の方法について述べる．
-第5章では，前章の実験の結果をもとにした考察について述べる．
-第6章では，実験結果および考察を踏まえた結論と今後の展望について述べる．
-\textsf{b2181920@photon.chitose.ac.jp}\textgt{マジかこれ}
 \end{document}
