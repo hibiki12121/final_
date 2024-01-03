@@ -62,7 +62,70 @@ $$
 
 
 \section{Attention \label{c4s3}}
-Attentionは、
+Attention は，先述の通り，Transformer の中枢を担う仕組みである．
+自然言語処理においては，単語の意味を理解するために，文中のどの単語に注目するすべきかを示すスコアである．Query:${Q}$，Key:${K}$，Value:${V}$の3つのベクトルから計算される．
+${K}$と${V}$は1対1の組である．
+Attentionは，Self-AttentionとSource-Target-Attentionの2種類がある．また，Attentionの算出方法は加法を使う場合と内積を使う場合があるが，Transformerで使うAttentionは内積を使って算出するため，以降のAttentionの計算は内積を使用していることを前提とする．
+
+\subsection{Self-Attention \label{c4s3-1a}}
+${Q}$, ${K}$, ${V}$は全て同じデータから得られた値を使用する．
+例として「私／は／大学生／です」という文から${Q}$を得たとすると，${K}$, ${V}$も同じ文から取得する．Transformer では Encoder, Decoder の両方に採用され，文の構造や，形態素同士の関係(例文では「私」=「大学生」)を獲得するために使用される．
+
+\subsection{Target-Attention \label{c4s3-1b}}
+${Q}$と${K}$, ${V}$は異なるデータから得られた値を使用する(${K}$, ${V}$は同じデータから取得する)．
+例として「風邪／を／引いた」，「病院／に／行く」という2文があるとき，${Q}$は「風邪／を／引いた」から，${K}$, ${V}$は「病院／に／行く」から取得する．
+ Transfomer では Decoder で採用され，「風邪／を／引いた」→「病院／に／行く」という対話の学習に用いられる．
+入力文に対応する出力文が出力されるように学習を行う．
+
+以上の Attention を基本とし，Transformers では Scaled Dot-Product Attention と Multi-Head Attentionが実装されている．
+その仕組みを図aaa，図aaaに示す．
+
+% % \begin{figure}[H]
+% 	\centering
+% 	\includegraphics[width=80mm]{image/transformer-multi-head-attention.png}
+% 	\caption{Multi-Head Attentionの構造}
+% 	\label{mha}
+% \end{figure}
+
+% % \begin{figure}[H]
+% 	\centering
+% 	\includegraphics[width=80mm]{image/transformer-scaled-dot-product-attention.png}
+% 	\caption{Scaled Dot-Product Attentionの構造}
+% 	\label{sda}
+% \end{figure}
+
+% 	${Q}$ ${K}$ ${V}$
+
+\subsubsection{Scaled Dot-Product Attention}
+ ${Q}$に対応する${K}$を探し，その${K}$を元にして対応する${V}$を取得する．
+まず，${Q}$と${K}$の内積${QK^T}$を取ることで${Q}$に対する${K}$の関連度を算出する．
+次に softmax 関数を用いて正規化する．ここで，正規化された値は，Attention の重みであり${Q}$に対応する${K}$の位置を示している．
+次に Attention の重みと${V}$の内積を求め，${K}$の位置に対応する${V}$を加重和として取得する．
+図 3.5 の数式を式(\ref{attention})に，softmax 関数を式(\ref{softmax})に示す．
+
+\begin{equation}
+    \mbox{Attention}(Q,K,V) = \mbox{softmax}\left( \frac{QK^T}{\sqrt{d_k}}\right)
+    \label{attention}
+\end{equation}
+
+\begin{equation}
+    \label{softmax}
+    \frac{\exp(a_i)}{\sum_{j=1}^{n}\exp(a_j)} \quad(i=1,...,n)
+\end{equation}
+
+${QK^T}$の値は次元数に比例して大きくなり，勾配は小さくなってしまう．
+そこで式\ref{attention}では${QK^T}$を${\sqrt{d_k}}$で割ることで${QK^T}$の値の増大を防いでいる．
+ここで，${d_k}$は${Q}$の次元数を後述する Multi-Head Attention の Head 数で割った値である．
+
+\begin{equation}
+    \label{dk}
+    d_k = \frac{Q\mbox{の次元数}}{\mbox{Multi-Head Attention のHead数}}
+\end{equation}
+
+\subsubsection{Multi-Head Attention}
+Multi-Head Attention は，Scaled Dot-Product Attention を1つの Head として，複数の Head を並列で処理する仕組みである．
+仮に，Head 数が 8 , ${Q}$, ${K}$, ${V}$ の次元数が 512 とすると${\frac{512}{8}=64}$であり，次元数が 64 の ${Q}$, ${K}$, ${V}$ を用いた Scaled Dot-Product Attention を並列に 8 個処理することになる．最終的には個別に計算された値を 1 つのベクトルに落とし込む(concat)ことで単語の分散表現を得る．
+この Multi-Head Attention を 1 つのユニット(図 3.2 の Trm )として全結合的に接続したものが BERT モデルである．
 
 \section{Transformer \label{c4s4}}
 Transformer とは，再帰型ニューラルネットワーク (以下，RNN) を一切使わずに Attention のみを使うことで，入力と出力の文章同士の広範囲な依存関係を捉えられるモデルである．[7]
@@ -73,16 +136,16 @@ Transformerの構造を図aaaに示す．
 
 \begin{figure}[H]%3.3
 	\centering
-	\includegraphics[width=120mm]{image/transformer.png}
+	\includegraphics[width=130mm]{image/transformer.png}
 	\caption{Transformerの構造}
 	\label{transformer}
 \end{figure}
 
 \section{BERT \label{c4s5}}
 \subsection{概要}
-BERT とは，Bidirectional Encoder Representations from Transformers の略で， 「Transformerによる双方向のエンコード表現」と訳され，2018 年 10 月に Google の Jacob Devlin らの論文[6] で発表された自然言語処理モデルである．
-また，質問応答 (Question Answering) や自然言語推論 (Multi Natural Language Inference) などの 11 種の自然言語処理タスクにおいて当時の最高性能を達成している手法であり，これ以降，このモデルから派生して作られたモデルが多数存在する．
-また，現在の Google の検索エンジンにも用いられている．
+BERT とは，Bidirectional Encoder Representations from Transformers の略で， 「Transformerによる双方向のエンコード表現」と訳され，2018 年に Jacob Devlin らの論文[6] で発表された自然言語処理モデルである．
+また，質問応答 (Question Answering) や自然言語推論 (Multi Natural Language Inference) などの 11 種の自然言語処理タスクにおいて当時の最高性能を達成している手法であり，これ以降，このモデルから派生して作られたモデルが多数存在する．また，現在のWeb検索エンジンにも用いられている．
+
 BERT の学習は，大きく2段階に分けられる．
 1つ目がラベル付けされていないデータを学習させる「事前学習」であり，2つ目が事前学習時と比較的少量のデータを用いる「Fine Tuning」である．
 事前学習で汎用的なモデルを作成し，Fine Tuningを行うことで，個々のタスクに適応したモデルを作成する．
@@ -112,77 +175,12 @@ BERTのモデルアーキテクチャは，双方向のtransformerのエンコ�
 % 	\label{transformer}
 % \end{figure}
 
-\subsubsection{Attention}
-Attention とは，先述の通り，Transformer の中枢を担う仕組みである．
-自然言語処理においては，単語の意味を理解するために，文中のどの単語に注目するすべきかを示すスコアである．Query:${Q}$，Key:${K}$，Value:${V}$の3つのベクトルから計算される．
-${K}$と${V}$は1対1の組である．
-Attentionは，Self-AttentionとSource-Target-Attentionの2種類がある．また，Attentionの算出方法は加法を使う場合と内積を使う場合があるが，Transformerで使うAttentionは内積を使って算出するため，以降のAttentionの計算は内積を使用していることを前提とする．
 
-\begin{itemize}
-	\item Self-Attention \par
-	${Q}$, ${K}$, ${V}$は全て同じデータから得られた値を使用する．
-	例として「私／は／大学生／です」という文から${Q}$を得たとすると，${K}$, ${V}$も同じ文から取得する．Transformer では Encoder, Decoder の両方に採用され，文の構造や，形態素同士の関係(例文では「私」=「大学生」)を獲得するために使用される．
-
-	\item Target-Attention \par
-	${Q}$と${K}$, ${V}$は異なるデータから得られた値を使用する(${K}$, ${V}$は同じデータから取得する)．
-	例として「風邪／を／引いた」，「病院／に／行く」という2文があるとき，${Q}$は「風邪／を／引いた」から，${K}$, ${V}$は「病院／に／行く」から取得する．
-	 Transfomer では Decoder で採用され，「風邪／を／引いた」→「病院／に／行く」という対話の学習に用いられる．
-	入力文に対応する出力文が出力されるように学習を行う．
-\end{itemize}
-
-以上の Attention を基本とし，Transformers では Scaled Dot-Product Attention と Multi-Head Attentionが実装されている．
-その仕組みを図aaa，図aaaに示す．
-
-% % \begin{figure}[H]
-% 	\centering
-% 	\includegraphics[width=80mm]{image/transformer-multi-head-attention.png}
-% 	\caption{Multi-Head Attentionの構造}
-% 	\label{mha}
-% \end{figure}
-
-% % \begin{figure}[H]
-% 	\centering
-% 	\includegraphics[width=80mm]{image/transformer-scaled-dot-product-attention.png}
-% 	\caption{Scaled Dot-Product Attentionの構造}
-% 	\label{sda}
-% \end{figure}
-
-% 	${Q}$ ${K}$ ${V}$
-
-\begin{itemize}
-\item Scaled Dot-Product Attention \par
-\par ${Q}$に対応する${K}$を探し，その${K}$を元にして対応する${V}$を取得する．
-まず，${Q}$と${K}$の内積${QK^T}$を取ることで${Q}$に対する${K}$の関連度を算出する．
-次に softmax 関数を用いて正規化する．ここで，正規化された値は，Attention の重みであり${Q}$に対応する${K}$の位置を示している．
-次に Attention の重みと${V}$の内積を求め，${K}$の位置に対応する${V}$を加重和として取得する．
-図 3.5 の数式を式(\ref{attention})に，softmax 関数を式(\ref{softmax})に示す．
-
-\begin{equation}
-    \mbox{Attention}(Q,K,V) = \mbox{softmax}\left( \frac{QK^T}{\sqrt{d_k}}\right)
-    \label{attention}
-\end{equation}
-
-\begin{equation}
-    \label{softmax}
-    \frac{\exp(a_i)}{\sum_{j=1}^{n}\exp(a_j)} \quad(i=1,...,n)
-\end{equation}
-
-${QK^T}$の値は次元数に比例して大きくなり，勾配は小さくなってしまう．
-そこで式\ref{attention}では${QK^T}$を${\sqrt{d_k}}$で割ることで${QK^T}$の値の増大を防いでいる．
-ここで，${d_k}$は${Q}$の次元数を後述する Multi-Head Attention の Head 数で割った値である．
-
-\begin{equation}
-    \label{dk}
-    d_k = \frac{Q\mbox{の次元数}}{\mbox{Multi-Head Attention のHead数}}
-\end{equation}
-
-\item Multi-Head Attention \par
-Multi-Head Attention は，Scaled Dot-Product Attention を1つの Head として，複数の Head を並列で処理する仕組みである．
-仮に，Head 数が 8 , ${Q}$, ${K}$, ${V}$ の次元数が 512 とすると${\frac{512}{8}=64}$であり，次元数が 64 の ${Q}$, ${K}$, ${V}$ を用いた Scaled Dot-Product Attention を並列に 8 個処理することになる．最終的には個別に計算された値を 1 つのベクトルに落とし込む(concat)ことで単語の分散表現を得る．
-この Multi-Head Attention を 1 つのユニット(図 3.2 の Trm )として全結合的に接続したものが BERT モデルである．
-
-\end{itemize}
 
 \section{LLM \label{c4s6}}
 LLMとは、Large Language Model の略称であり、大規模言語モデルと呼ばれる。大規模言語モデルという用語についての正式な定義はないが、大規模コーパスを用いて事前学習を行っており、パラメータ総数が数百万以上の言語モデルを指して言われることが多い。LLMの例として、先述のBERTやOpenAI社が開発したGPT-3が挙げられる。
+
+\section{生成AI \label{c4s7}}
+生成AIは、テキストや画像、音声を自律的に生成できるAI技術の総称であり、LLMは生成AIの一部とされる。
+生成AIは、人間の指示に基づき、AIが
 
