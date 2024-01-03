@@ -62,7 +62,7 @@ $$
 
 
 \section{Attention \label{c4s3}}
-Attention は，先述の通り，Transformer の中枢を担う仕組みである．
+Attention は，Transformer の中枢を担う仕組みである．
 自然言語処理においては，単語の意味を理解するために，文中のどの単語に注目するすべきかを示すスコアである．Query:${Q}$，Key:${K}$，Value:${V}$の3つのベクトルから計算される．
 ${K}$と${V}$は1対1の組である．
 Attentionは，Self-AttentionとSource-Target-Attentionの2種類がある．また，Attentionの算出方法は加法を使う場合と内積を使う場合があるが，Transformerで使うAttentionは内積を使って算出するため，以降のAttentionの計算は内積を使用していることを前提とする．
@@ -72,7 +72,7 @@ ${Q}$, ${K}$, ${V}$は全て同じデータから得られた値を使用する�
 例として「私／は／大学生／です」という文から${Q}$を得たとすると，${K}$, ${V}$も同じ文から取得する．Transformer では Encoder, Decoder の両方に採用され，文の構造や，形態素同士の関係(例文では「私」=「大学生」)を獲得するために使用される．
 
 \subsection{Target-Attention \label{c4s3-1b}}
-${Q}$と${K}$, ${V}$は異なるデータから得られた値を使用する(${K}$, ${V}$は同じデータから取得する)．
+${Q}$、${K}$, ${V}$は異なるデータから得られた値を使用する(${K}$, ${V}$は同じデータから取得する)．
 例として「風邪／を／引いた」，「病院／に／行く」という2文があるとき，${Q}$は「風邪／を／引いた」から，${K}$, ${V}$は「病院／に／行く」から取得する．
  Transfomer では Decoder で採用され，「風邪／を／引いた」→「病院／に／行く」という対話の学習に用いられる．
 入力文に対応する出力文が出力されるように学習を行う．
@@ -80,19 +80,19 @@ ${Q}$と${K}$, ${V}$は異なるデータから得られた値を使用する(${
 以上の Attention を基本とし，Transformers では Scaled Dot-Product Attention と Multi-Head Attentionが実装されている．
 その仕組みを図aaa，図aaaに示す．
 
-% % \begin{figure}[H]
-% 	\centering
-% 	\includegraphics[width=80mm]{image/transformer-multi-head-attention.png}
-% 	\caption{Multi-Head Attentionの構造}
-% 	\label{mha}
-% \end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=80mm]{image/transformer-multi-head-attention.png}
+	\caption{Multi-Head Attentionの構造}
+	\label{mha}
+\end{figure}
 
-% % \begin{figure}[H]
-% 	\centering
-% 	\includegraphics[width=80mm]{image/transformer-scaled-dot-product-attention.png}
-% 	\caption{Scaled Dot-Product Attentionの構造}
-% 	\label{sda}
-% \end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=80mm]{image/transformer-scaled-dot-product-attention.png}
+	\caption{Scaled Dot-Product Attentionの構造}
+	\label{sda}
+\end{figure}
 
 % 	${Q}$ ${K}$ ${V}$
 
