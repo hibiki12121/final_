@@ -61,7 +61,18 @@ $$
 Attentionは、
 
 \section{Transformer \label{c4s4}}
+Transformer とは，再帰型ニューラルネットワーク (以下，RNN) を一切使わずに Attention のみを使うことで，入力と出力の文章同士の広範囲な依存関係を捉えられるモデルである．[7]
+RNN は，単語が連続し順序が重要となるような時系列情報を扱うのに最適であるが，逐次的に処理を行うため，処理に多くの時間を必要とする．
+また，離れた位置にある文，単語の依存関係をとらえることが難しいといった問題がある．
+Transformerは以上のような問題点を克服したモデルである．
+Transformerの構造を図aaaに示す．
 
+\begin{figure}[H]%3.3
+	\centering
+	\includegraphics[width=120mm]{image/transformer.png}
+	\caption{Transformerの構造}
+	\label{transformer}
+\end{figure}
 
 \section{BERT \label{c4s5}}
 \subsection{概要}
@@ -83,16 +94,16 @@ BERTのモデルアーキテクチャは，双方向のtransformerのエンコ�
 % 	\label{architechture}
 % \end{figure}
 
-\subsubsection{Transformers}
-Transformer とは，再帰型ニューラルネットワーク (以下，RNN) を一切使わずに Attention のみを使うことで，入力と出力の文章同士の広範囲な依存関係を捉えられるモデルである．[7]
-RNN は，単語が連続し順序が重要となるような時系列情報を扱うのに最適であるが，逐次的に処理を行うため，処理に多くの時間を必要とする．
-また，離れた位置にある文，単語の依存関係をとらえることが難しいといった問題がある．
-Transformerは以上のような問題点を克服したモデルである．
-Transformerの構造を図aaaに示す．
+% \subsubsection{Transformers}
+% Transformer とは，再帰型ニューラルネットワーク (以下，RNN) を一切使わずに Attention のみを使うことで，入力と出力の文章同士の広範囲な依存関係を捉えられるモデルである．[7]
+% RNN は，単語が連続し順序が重要となるような時系列情報を扱うのに最適であるが，逐次的に処理を行うため，処理に多くの時間を必要とする．
+% また，離れた位置にある文，単語の依存関係をとらえることが難しいといった問題がある．
+% Transformerは以上のような問題点を克服したモデルである．
+% Transformerの構造を図aaaに示す．
 
 % \begin{figure}[H]%3.3
-% % 	\centering
-% 	\includegraphics[width=90mm]{image/transformer.png}
+% 	\centering
+% 	\includegraphics[width=100mm]{image/transformer.png}
 % 	\caption{Transformerの構造}
 % 	\label{transformer}
 % \end{figure}
