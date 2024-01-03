@@ -20,7 +20,30 @@
 \section{3.4 \label{c3s4}}
 本研究チームで研究および開発・保守を行っている話しことばチェッカーは、文章中に含まれる話しことばを検出し、書きことばへの修正例を提示し、学生自身による推敲をサポートするWebシステムである。
 
+\begin{figure}[H]
+	\centering
+ 	\includegraphics[width=150mm]{image/checkerss-plain.png}
+	\caption{話しことばチェッカーの入力画面}
+	\label{checkerss-plain}
+\end{figure}
+
 レポートなどの文章を入力し提出することで、文章中の話しことばの箇所が色付けされる。画面上で、色付けされた箇所にマウスを合わせると、書きことばへの修正例およびコメントといった推敲に役立つ情報が確認できる。実際の利用画面を図3.xに示す。
+
+\begin{figure}[H]
+	\centering
+ 	\includegraphics[width=150mm]{image/checkerss-result.png}
+	\caption{話しことばチェッカーの話しことば検出画面}
+	\label{checkerss-plain}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+ 	\includegraphics[width=150mm]{image/checkerss-popout.png}
+	\caption{修正例などを表示している様子}
+	\label{checkerss-plain}
+\end{figure}
+
+
 
 すべての話しことばのうち、INDEPENDENCE、PREFIX、SUFFIXに振り分けられている話しことばについては、現在運用している話しことばチェッカーで検出可である。一方で、COLLOCATION、OTHERに振り分けられえた話しことばは現状では不可能である。COLLOCATIONには、係り受けを伴う「～たり～たり」などの対象単語とそのほかに着目すべき単語との位置が離れているものがある。これは、話しことばの検出方式が対象単語とその前後に隣接する単語をチェックする仕様となっているためである。
 
