@@ -26,7 +26,12 @@
 \subsection{混合行列 \label{c4s2-1}}
 機械学習における二値分類の評価指標に，混合行列(Confusion Matrix)がある．二値分類で出力されたクラス分類結果をまとめた行列であり，二値分類タスクを行う機械学習モデルの評価指標として利用される．
  
-% 図挿入予定
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=150mm]{image/confusion-matrix.png}
+	\caption{混合行列}
+	\label{confusion-matrix}
+\end{figure}
 
 混合行列左上のTP(True Positive)は，実際のデータが正であるものに対し正と予想されたデータの数である．FP(False Positive)は，実際のデータが正であるものに対し負と予想されたデータである．TN(True Negative)は，実際のデータが負であるものに対し負と予想されたデータである．FN(False Negative)は，実際のデータが負であるものに対し正と予想されたデータの個数である．これら4つの値を用いて，後述する正解率，再現率，適合率，F1値を算出する．
 
@@ -182,5 +187,5 @@ LLMとは、Large Language Model の略称であり、大規模言語モデル�
 
 \section{生成AI \label{c4s7}}
 生成AIは、テキストや画像、音声を自律的に生成できるAI技術の総称であり、LLMは生成AIの一部とされる。
-生成AIは、文章やテキスト、画像、音声などそれぞれに特化した形で作られている。文章生成であれば先述のGPT-3、GPT-3.5、GPT-4、画像生成であればStable Diffusionといったものが挙げられる。
+生成AIは、文章やテキスト、画像、音声などそれぞれに特化した形で作られている。文章生成であれば先述のGPT-3、GPT-3.5、GPT-4、画像生成であればStable Diffusionが挙げられる。
 
