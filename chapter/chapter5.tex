@@ -1,9 +1,9 @@
-\chapter{第5章予定地[検証？] \label{c5}}
+\chapter{LLMによる主観客観判定 \label{c5}}
 
 \section{5.1 \label{c5s1}}
 話しことばチェッカーの現状の課題
 グレーゾーンの検出ができていない
-機械学習は有効であることが示唆されている。
+機械学習は有効であることが示唆されている．
 課題点は事例収集
 
 現在運用している話しことばチェッカーの
@@ -11,20 +11,47 @@
 
 
 \section{5.2 \label{c5s2}}
-LLMは説明不可能なAIであるため、話しことば／書きことばの分類が有効であるかの妥当性を判断することは難しい。そこで、先行研究で使用したBERTモデルによるグレーゾーンを含む文章の主観客観分の分類タスクをLLMに行わせた。
+LLMは説明不可能なAIであるため，話しことば／書きことばの分類が有効であるかの妥当性を判断することは難しい．そこで，先行研究で使用したBERTモデルによるグレーゾーンを含む文章の主観客観分の分類タスクをLLMに行わせた．
 
-本検証では、BERTモデル構築の時に使われた山下が作成したグレーゾーン「てしまう」を含む例文を集めたデータセットを用いた。これに対し、以下のようなプロンプトを与え、LLMによるグレーゾーンの分類を行わせた。
+本検証では，BERTモデル構築の時に使われた山下が作成したグレーゾーン「てしまう」を含む例文を集めたデータセットを用いた．これに対し，以下のようなプロンプトを与え，LLMによるグレーゾーンの分類を行わせた．
 
 \input{table/ambiguous-sbj-obj}
 
+\subsubsection{検証方法}
+検証は，以下の項目で行った．
+\begin{itemize}
+    \item[1.] 主観または客観に分類されている文章を20件ずつ，LLMに主観または客観に分類させる
+    \item[2.] 主観または客観に分類されている文章を40件ずつ，LLMに主観または客観に分類させる
+    \item[3.] 主観または客観に分類されている文章を20件ずつ，LLMに話しことばまたは書きことばに分類させる
+    \item[4.] 主観または客観に分類されている文章を40件ずつ，LLMに話しことばまたは書きことばに分類させる
+\end{itemize}
+話しことばまたは書きことばへの分類は，先行研究\cite{checker}の仮定を採用している．
+
+ChatGPTのブラウザ版を使用し，表\ref{prompt-spokenorwritten}と山下が作成したデータセット475件を40件ずつに分けて回答を生成させたとき，20件ずつに分けて回答を生成させたときのそれぞれで行った．
+プロンプトには，ChatGPTが出力を生成する際に条件を認識しやすくするために役割を与えている．これは，ChatGPTが広範囲の分野を学習しており，回答を生成するときの一貫性や回答精度を向上させる目的で与えている．
+
 \input{table/prompt-SpokenOrWritten}
 
-検証は、以下の項目で行った。
-\begin{itemize}
-    \item[1] 主観または客観に分類されている文章を、LLMに主観または客観に分類させる
-    \item[2] 主観または客観に分類されている文章を、LLMに話しことばまたは書きことばに分類させる
-\end{itemize}
-話しことばまたは書きことばへの分類は、先行研究の仮定を採用している。以上の検証方法を、プロンプトの組数を0, 1, 2, 7, 13件に分けて行った。
 
-\subsection{主観／客観への分類の結果}
+以上の検証方法を，Zero-shot Prompting, One-shot Prompting, Few-shot Prompting(n=13) の手法で行い，例の件数を変えたことによるChatGPTの回答結果を比較した。
 
+\subsection{Zero-shot Promptingでの分類の結果}
+Zero-shot Promptingでの回答結果の評価を表\ref{cfm-ex0}に示す。各々の条件での混合行列は表\ref{cf-ex0-sw20}、表\ref{cf-ex0-sw40}、表\ref{cf-ex0-so20}、表\ref{cf-ex0-so40}に示す。
+\input{table/cfm-ex0}
+\input{table/cf-ex0-sw20}
+\input{table/cf-ex0-sw40}
+\input{table/cf-ex0-so20}
+\input{table/cf-ex0-so40}
+
+話しことば/書きことば分類(40件ずつ)のときのAccuracyが75.32\%で最も高く、適合率も85.63\%と、こちらも最も高い結果が得られた。また、混同行列からは、どの条件においても話しことば(主観)であるものを正しく判定できていることがわかる。
+
+\subsection{考察}
+
+\subsection{One-shot Promptingでの分類の結果}
+One-shot Promptingでの回答結果の評価を表\ref{cfm-ex1}に示す。各々の条件での混合行列は表\ref{cf-ex1-sw20}、表\ref{cf-ex1-sw40}、表\ref{cf-ex1-so20}、表\ref{cf-ex1-so40}に示す。
+
+\input{table/cfm-ex1}
+\input{table/cf-ex1-sw20}
+\input{table/cf-ex1-sw40}
+\input{table/cf-ex1-so20}
+\input{table/cf-ex1-so40}
