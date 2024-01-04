@@ -1,15 +1,5 @@
 \chapter{LLMによる主観客観判定 \label{c5}}
 
-\section{5.1 \label{c5s1}}
-話しことばチェッカーの現状の課題
-グレーゾーンの検出ができていない
-機械学習は有効であることが示唆されている．
-課題点は事例収集
-
-現在運用している話しことばチェッカーの
-
-
-
 \section{5.2 \label{c5s2}}
 LLMは説明不可能なAIであるため，話しことば／書きことばの分類が有効であるかの妥当性を判断することは難しい．そこで，先行研究で使用したBERTモデルによるグレーゾーンを含む文章の主観客観分の分類タスクをLLMに行わせた．
 
@@ -55,3 +45,14 @@ One-shot Promptingでの回答結果の評価を表\ref{cfm-ex1}に示す。各�
 \input{table/cf-ex1-sw40}
 \input{table/cf-ex1-so20}
 \input{table/cf-ex1-so40}
+
+\subsection{Few-shot Promptingでの分類の結果}
+Few-shot Promptingでの回答結果の評価を表\ref{cfm-ex7}に示す。各々の条件での混合行列は表\ref{cf-ex7-sw20}、表\ref{cf-ex7-sw40}、表\ref{cf-ex7-so20}、表\ref{cf-ex7-so40}に示す。
+
+例の件数は7件と13件のときで検証を行った。
+
+\input{table/cfm-ex7}
+\input{table/cf-ex7-sw20}
+\input{table/cf-ex7-sw40}
+\input{table/cf-ex7-so20}
+\input{table/cf-ex7-so40}
