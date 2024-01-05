@@ -5,7 +5,7 @@
 など
 \end{comment}
 
-\section{4.1\label{c4s1}}
+\section{概要\label{c4s1}}
 機械学習は，特定のタスクを効率的に処理するため，あるデータが持っているルールやパターンを反復学習を用いて学習し，そこから得られたパターンをもとに予測を行う技術である．2010年代にニューラルネットワークや自然言語処理が登場し，機械学習が再び注目されるようになった．
 さらに，ハードウェアの性能の向上およびインターネットの発展により，機械学習に利用できる学習データを容易に収集できるようになったことから，ニューラルネットワークを用いた機械学習が広く用いられるようになった．ニューラルネットワークは，人体の脳の神経細胞であるニューロンおよびそのつながりである神経回路を数理モデルで表現したものである．
 ニューラルネットワークが登場する前の機械学習では，データの特徴量などは人間の手によって設定されていたが，特徴量の調整などの調整は機械が自動で行うため，元のデータを与えることで，従来の人間の手による調整よりも高い精度で予測を行うことができる．
@@ -155,30 +155,76 @@ BERT の学習は，大きく2段階に分けられる．
 1つ目がラベル付けされていないデータを学習させる「事前学習」であり，2つ目が事前学習時と比較的少量のデータを用いる「Fine Tuning」である．
 事前学習で汎用的なモデルを作成し，Fine Tuningを行うことで，個々のタスクに適応したモデルを作成する．
 
-% \subsection{アーキテクチャ}
-% BERTのモデルアーキテクチャは，双方向のtransformerのエンコーダとなっている．
-% 図aaaにBERTと，BERTと同様に事前学習を利用する自然言語処理モデルを比較したものを示す．
+\subsubsection{事前学習}
+事前学習は，大量の文章を学習することで，汎用的なモデルを形成する．
+ここで得られる事前学習済みモデルをベースとして，この段階より使用するデータの量が少ない「Fine Tuning」を行うことにより，多様なタスクに対応することが可能となる．
+BERTは，従来の自然言語処理モデルとは異なり，ラベルが付与されていないデータセットを利用することができる．
+これにより，大量のデータを用いることが可能になる．
+現状では．自然言語処理タスクのためにラベルが付与されたデータセットが少なく，入手することが困難である．
+さらに，ラベルを付与する場合，そのための時間やコストがかかってしまう．
+一方，インターネットが普及した現代では，ラベルが付与されていないデータは大量に存在し，容易に入手することが可能である．
+そのため，BERTはデータ不足を克服した点で評価されている．
+BERTの入力表現を図\ref{input}に示す．
 
-% %\begin{figure}[H]
-% 	\centering
-% % 	\includegraphics[width=150mm]{image/architechture.png}
-% 	\caption{各モデルの構造}
-% 	\label{architechture}
-% \end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=150mm]{image/BERT-input.png}
+	\caption{BERTの入力表現}
+	\label{input}
+\end{figure}
 
-% \subsubsection{Transformers}
-% Transformer とは，再帰型ニューラルネットワーク (以下，RNN) を一切使わずに Attention のみを使うことで，入力と出力の文章同士の広範囲な依存関係を捉えられるモデルである．[7]
-% RNN は，単語が連続し順序が重要となるような時系列情報を扱うのに最適であるが，逐次的に処理を行うため，処理に多くの時間を必要とする．
-% また，離れた位置にある文，単語の依存関係をとらえることが難しいといった問題がある．
-% Transformerは以上のような問題点を克服したモデルである．
-% Transformerの構造を図aaaに示す．
+input では，先頭に [CLS] ，文末に [SEP] という特殊なトークンを挿入する．
+[CLS] は分類タスクを解く時に使用される (それ以外のタスクではこのトークンは無視される)．
+[SEP] は文末であることを判別する．
+また，入力文の単語数を揃えるために [PAD] トークンを挿入する場合もある．
+図 3.6 の Token Embeddings は，input で入力された単語と特殊トークンをIDとして表現している．Segment Embeddings は [SEP] トークンを基準として，1 つ目の文を${E_A}$，2 つ目の文を${E_B}$のように区別した表現，Position Embedding は input 中の単語やトークンの位置を示す表現で，これらの総和が  BERT の入力表現である．
 
-% \begin{figure}[H]%3.3
-% 	\centering
-% 	\includegraphics[width=100mm]{image/transformer.png}
-% 	\caption{Transformerの構造}
-% 	\label{transformer}
-% \end{figure}
+\subsubsection{Masked Language Model}
+従来の自然言語処理モデルでは，文章を単一方向からでしか処理できなかった．
+そのため，目的の単語より前にある文章データから予測しなければならなかった．
+しかし，BERTは双方向のTransformerによって学習するため，従来の手法に比べ精度が向上した．
+それを実現しているのが Masked Language Model (以下，MLM) である．入力文の 15 ％の単語を確率的に別の token で置き換え，文脈から置き換える前の単語を予測させる．
+具体的には，選択された 15 ％のうち， 80 ％は [MASK] に置き換えるマスク変換，10 ％をランダムな異なる単語に変換し，残りの 10 ％はそのままの単語にする．
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=90mm]{image/BERT-mlm.png}
+	\caption{Masked Language Model の例}
+	\label{mlm}
+\end{figure}
+
+\subsubsection{Next Sentence Prediction}
+MLM は単語に関しての学習はできるが，文単位の学習はできない．
+そこで，2 つの入力文に対して「その 2 文が隣り合っているか」を当てるよう学習する．
+これにより，2 つの文の関係性を学習できる．
+Next Sentence Prediction (以下，NSP) によって BERT は文章も考慮した，より広範的な自然言語処理モデルとして機能できる．
+文の片方を 50 ％の確率で他の文に置き換え，それらが隣り合っている(isNext)か隣り合っていない(notNext)か判別することによって学習する．
+% NSPの例について画像を載せる
+図\ref{nsp}のようなプロセスを大量に繰り返すことで，モデルは言語処理能力を学習する．
+本研究では，穴埋め問題を解くことを前提としているため，この処理は行っていない．
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=90mm]{image/BERT-nsp.png}
+	\caption{NSPの手法}
+	\label{nsp}
+\end{figure}
+
+\subsubsection{Fine Tuning}
+Fine Tuning とは，ある領域の知識を別の領域の学習に適用させる技術である．
+従来のタスク処理モデルは特定のタスクにのみ対応している．
+しかし，BERT はモデルの構造を修正せずとも，様々なタスクに応用できる．
+Pretrained モデルに少量のデータでも Fine Tuning をするだけで重みを 0 から学習するのに比べて，短い時間で学習でき，過学習も抑制することができる．
+BERT ではこのような汎用性の高さも評価されている．
+図\ref{finetuning}に Fine Tuning の仕組みを示す．
+BERT では事前学習で得られたパラメータを初期値として，図\ref{finetuning}のように各タスクごとのレイヤーを上につけて，ラベル付きデータで学習を行う．
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=120mm]{image/BERT-finetuning.png}
+	\caption{Fine Tuning の仕組み}
+	\label{finetuning}
+\end{figure}
 
 
 
