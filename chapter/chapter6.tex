@@ -1,6 +1,6 @@
-\chapter{LLMによるグレーゾーンの主観客観判定 \label{c6}}
+\chapter{ChatGPTによるグレーゾーンの主観客観判定 \label{c6}}
 
-\section{LLMによるグレーゾーンの主観客観判定 \label{c6s2}}
+\section{ChatGPTによるグレーゾーンの主観客観判定 \label{c6s2}}
 LLMは説明不可能なAIであるため，話しことば／書きことばの分類が有効であるかの妥当性を判断することは難しい．そこで，先行研究で使用したBERTモデルによるグレーゾーンを含む文章の主観客観の分類タスクをLLMに行わせた．
 
 本検証では，BERTモデル構築の時に使われた山下が作成したグレーゾーン「てしまう」を含む例文を集めたデータセット475件を用いた．これに対し，以下のようなプロンプトを与え，ChatGPTにグレーゾーンの分類を行わせた．
@@ -51,7 +51,7 @@ Zero-shot Promptingでの回答結果の評価を表\ref{cfm-ex0}に示す。各
 \subsection{考察}
 例の数を増やしたが，\ref{c6s1-1}節の結果と大きな変化がないまたはそれよりも低い結果が得られた．混合行列からは話しことば(主観)であるものを正しく判定した個数が多いことから，話しことばの特性がつかみやすいことが考えられる．
 
-\subsection{Few-shot Promptingでの分類の結果 \label{c6s1-3}}
+\subsection{Few-shot Promptingでの分類の結果(2) \label{c6s1-3}}
 例の組数を13件に増やしたときのFew-shot Promptingでの回答結果の評価を表\ref{cfm-ex13}に示す。各々の条件での混合行列は表\ref{cf-ex13-sw20}、表\ref{cf-ex13-sw40}、表\ref{cf-ex13-so20}、表\ref{cf-ex13-so40}に示す。
 
 \input{table/cfm-ex13}
