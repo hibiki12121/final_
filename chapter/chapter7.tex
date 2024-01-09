@@ -9,6 +9,11 @@
 ChatGPTに
 
 \subsection{検証方法}
-プロンプトの構成は，ChatGPTに役割を与える「役割」，取り組んでほしいタスクを示した「指示」，
+プロンプトの構成は，ChatGPTに役割を与える「役割」，取り組んでほしいタスクを示した「指示」，「話しことばの具体例」，「書きことばリスト」，「学生のレポート本文(検出をさせる文章)」の5段構成である．
+
+\input{table/prompt-detectspoken-api}
+\input{table/prompt-detectspoken-klist}
+
+書きことばリストは，ChatGPTが検出する「話しことばとされるもの」の中で，明らかに話しことばではないものを選択し，リストにあげたものである．
 
 \section{7.2 \label{c7s2}}
