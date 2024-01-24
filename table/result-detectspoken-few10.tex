@@ -1,0 +1,13 @@
+\begin{table}[H]
+\caption{Few-shot Promptingを用いたときの検出結果}
+\label{result-detectspoken-few10}
+\centering
+\begin{tabular}{|l|r|r|r|r|r|}
+\hline
+ & \multicolumn{1}{c|}{zero-shot} & \multicolumn{1}{c|}{\begin{tabular}[c]{@{}c@{}}few-shot\\ 例2件\end{tabular}} & \multicolumn{1}{c|}{\begin{tabular}[c]{@{}c@{}}few-shot\\ 例5件\end{tabular}} & \multicolumn{1}{c|}{\begin{tabular}[c]{@{}c@{}}few-shot(10)\\ 例10件\end{tabular}} & \begin{tabular}[c]{@{}r@{}}話しことば\\ チェッカー\end{tabular} \\ \hline
+\begin{tabular}[c]{@{}l@{}}話しことばとして\\ 検出されたもの\\ (単位: 種類)\end{tabular} & 120 & 125 & 135 & 125 & - \\ \hline
+\begin{tabular}[c]{@{}l@{}}チェッカーで検出\\ した話しことば\end{tabular} & 6 & 8 & 5 & 5 & 20 \\ \hline
+グレーゾーン & 2 & 2 & 2 & 2 & 2 \\ \hline
+\begin{tabular}[c]{@{}l@{}}実際は話しことば\\ ではなかったもの\end{tabular} & 106 & 114 & 130 & 118 & - \\ \hline
+\end{tabular}
+\end{table}
