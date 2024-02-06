@@ -2,99 +2,128 @@
 
 本章では，LLMを用いた話しことばを検出させる実験について述べる．LLMが持つ話しことばの知識を本システムの話しことばルールを比較し，ChatGPTがもつ話しことばの認識について調査した。
 
-\begin{comment}
-書きことばリストは、話しことばチェッカーで検出しない表現をもとに選んでいる。
-それでもchatGPTが出力する場合は、チェッカーの癖もあり得る。← これは要相談
-\end{comment}
-\section{7.1 \label{c7s1}}
-本実験で用いたデータは，本学で2019年度に開講された「アルゴリズムとプログラミング」の講義内で提出されたレポートの16件を取り出し，それらのレポートの本文である．
+\subsubsection{使用したデータ}
+本実験で用いたデータは，本学で2019年度に開講された「アルゴリズムとプログラミング」の講義内で課されたレポートの中から16件を抽出し，そのレポート本文を用いた．後述の各検証では一律でこのデータを用いた．
 
-\subsection{検証方法}
-プロンプトの構成は，ChatGPTに役割を与える「役割」，取り組んでほしいタスクを示した「指示」，「話しことばの具体例」，「書きことばリスト」，「学生のレポート本文(検出をさせる文章)」の5段構成である．
+\subsubsection{検証方法}
+検証は，プロンプトに話しことばの検出をせる内容の指示を入力し，得られた出力結果を話しことばチェッカーに通す．このときの出力結果は「話しことばとされたもの」と呼ぶことにし，話しことばチェッカーで検出された話しことばの種類数を精度の指標とし，LLMの話しことばの認識について調査した．
 
-\input{table/prompt-detectspoken-api}
-\input{table/prompt-detectspoken-klist}
+本章の検証では，ChatGPT APIからGPT-4を利用している．表\ref{table-parameter}にAPI使用時のパラメータ設定を示す．
 
-書きことばリストは，ChatGPTが検出する「話しことばとされるもの」の中で，明らかに話しことばではないものを選択し，リストにあげたものである．
+検証時に，話しことばチェッカーで検出した話しことばおよびグレーゾーンの種類を表\ref{result-checker-detect}に示す．
+
+\input{table/parameter}
+\input{table/result-checker-detect}
+
+\section{Few-shot Prompting を用いた話しことば検出 \label{c7s1}}
+主観・客観の分類では，文章と分類結果を1組にして，プロンプトに与える例示に組み込んだ．本検証でも同様に，例文とその中に含まれている話しことばを1つの例としてプロンプトに組み込み，話しことば検出を行った．
+
+\input{table/prompt-detectspoken-few10}
+
+プロンプトは，LLMが内容を正しく読み取れることを考慮し，LLMに役割を与える「役割」，取り組んでほしいタスクを示した「指示」，「話しことばの具体例」，「書きことばリスト」，「学生のレポート本文(検出をさせる文章)」のように構成した．
+
+本検証では，与える例を0, 2, 5, 10, 40件のときに分けて検証を行った．
 
 \subsection{結果}
-上記のプロンプトで得られた話しことば検出結果を表\ref{kenshutukekka}に示す．
+LLMの検出結果を表\ref{result-detectspoken-few10}に示す．すべての場合で120種類以上の表現を話しことばとして検出したが，実際に話しことばであったものは，多くても8種類であり，ほとんどすべてが話しことばではない表現であった．
+
+\input{table/result-detectspoken-few10}
+
+\subsection{考察}
+話しことばの検出に焦点を当てていたが，話しことばと対になる存在である書きことばについて言及していないことや，どのようなものが書きことばであるかを理解できていないことが考えられる．これを踏まえ，次節では，書きことばの具体例を新たにプロンプトに組み込んで検証を行った．
+
+\section{話しことば書きことばリストを用いた話しことば検出 \label{c7s2}}
+明らかに書きことばであると考えられる表現を列挙し，これらの表現を検出しないように指示を加えたプロンプトを用いた検証を行った．
+書きことばリストには，誤検出で特に多かった表現を選択している．
 
 \begin{table}[H]
 	\centering
-        \caption{検出結果}
- 	\includegraphics[width=150mm]{image/kenshutukekka-a.png}
-	\label{kenshutukekka}
-\end{table}
-\begin{table}[H]
-    \centering
-    \includegraphics[width=150mm]{image/kenshutukekka-b.png}
-    \label{kenshutukekka-2}
+        \caption{書きことばリスト}
+ 	\includegraphics[width=80mm]{image/image-klistTable.png}
+	\label{klistTable}
 \end{table}
 
-書きことばリストにあげている表現を検出した個数は60個である．書きことばリストに含まれている表現の個数をまとめた表を表\ref{kenshutu-ichiran-old}に示す．
+本検証では，\ref{c7s1}節の例40件を与えたときと与えなかったときで比較している．
+
+\subsection{結果}
+本検証の結果を表\ref{result-klist-few40}，表\ref{result-klist-few0}に示す．例示を入れている方では検出数は70種類以上あるが，実際に話しことばであるものは
+\input{table/result-klist-few40}
+\input{table/result-klist-few0}
+
+\subsection{考察}
+例を与えたときの方が例を与えなかったときよりも誤検出が多く，検出できた話しことばの種類の数に大きな変化が無く，相対的に検出の精度が低くなることがわかった．このことから，\ref{c7s1}節の方式での例示では話しことば検出の効果が低いことが考えられる．
+
+\section{話しことば・書きことばの定義を変更したときの話しことば検出 \label{c7s3}}
+プロンプトには話しことばの定義を記述していたが，LLMが生成した話しことばの定義を利用することで誤検出が減らせると仮定し，LLMに話しことばの定義を生成させ，一部編集を加えたものをプロンプトに組み込み，これを用いて話しことば検出を行った．
+
+\input{table/prompt-spoken-written-def}
+
+\subsection{結果}
+
+\begin{table}[H]
+\centering
+\caption{話しことば検出結果}
+\label{result-expert}
+\begin{tabular}{|l|r|}
+\hline
+話しことばとして検出されたもの(単位: 種類) & 60 \\ \hline
+チェッカーで検出した話しことば & 15 \\ \hline
+グレーゾーン & 2 \\ \hline
+話しことばではなかったもの & 43 \\ \hline
+\end{tabular}
+\end{table} % 移行忘れず
 
 \begin{table}[H]
 	\centering
-        \caption{話しことばチェッカーの話しことば検出画面}
- 	\includegraphics[width=55mm]{image/kenshutu-ichiran-old.png}
+        \caption{書きことばリストに載っている表現の出現頻度}
+ 	\includegraphics[width=50mm]{image/kenshutu-ichiran-old.png}
 	\label{kenshutu-ichiran-old}
 \end{table}
 
-\section{書きことばリストを用いた検証 \label{c7s2}}
-書きことばリストをプロンプトに組み込み，誤検出の減少を図ったが，明らかな減少は見られなかった．書きことばリストにあげられている表現が依然として多く，得られた出力結果をを用いて，書きことばリストに載っている表現を除去するように再度指示を与えた．
+\subsection{考察}
+書きことばリストを導入したときよりも誤検出が増えた．これは，定義を変更したことにより，定義に沿った検出結果を生成したことが考えられる．
+
+\section{指示を2段階に分けたときの話しことば検出 \label{c7s4}}
+書きことばリストにあげられている表現が依然として多いため，得られた出力結果を用いて，書きことばリストに載っている表現を除去するように再度指示を与えた．
 
 \input{table/prompt-klistremove} % なぜこのプロンプトにしたか書こう
 
-
-プロンプトの内容は，表\ref{prompt-detectspoken-api}，表\ref{prompt-sdetectspoken-klist}の書きことばリストの部分を抜き取り，\ref{c7s1}節の結果から書きことばリストに当てはまる表現を除去する内容である．
+% プロンプトの内容は，表\ref{prompt-detectspoken-api}，表\ref{prompt-sdetectspoken-klist}の書きことばリストの部分を抜き取り，\ref{c7s1}節の結果から書きことばリストに当てはまる表現を除去する内容である．
 
 \subsection{結果}
 上記のプロンプトで得られた話しことば検出結果を表\ref{kenshutu-ichiran-imp}に示す．
 
 \begin{table}[H]
+\centering
+\caption{話しことば検出結果}
+\label{result-checker-klist2times}
+\begin{tabular}{|l|r|}
+\hline
+話しことばとして検出されたもの(単位: 種類) & 46 \\ \hline
+チェッカーで検出した話しことば & 13 \\ \hline
+グレーゾーン & 2 \\ \hline
+話しことばではなかったもの & 31 \\ \hline
+\end{tabular}
+\end{table} % 移行忘れず
+
+\begin{table}[H]
 	\centering
-        \caption{話しことばチェッカーの話しことば検出画面}
- 	\includegraphics[width=55mm]{image/kenshutu-ichiran-imp.png}
+        \caption{書きことばリストに載っている表現の出現頻度}
+ 	\includegraphics[width=50mm]{image/kenshutu-ichiran-imp.png}
 	\label{kenshutu-ichiran-imp}
 \end{table}
 
 \subsection{考察}
-指示を二段階に分けることにより，明らかな書きことばの減少が確認できた．一度の処理では，ChatGPTは最初に書かれた指示を優先して行い，その後の指示を読み取ることが難しいと考えられる．
+指示を2段階に分けることにより，書きことばの減少が確認できた．一度の処理では，ChatGPTは最初に書かれた指示を優先して行い，その後の指示を読み取ることが難しいと考えられる．
 
-\section{話しことばの具体例を用いた検証}
-\section{}
-\begin{comment}
-    1. checkerの基本性能
-    2. プロンプトによる話しことば検出
-    3. データ整理
-        Few-shot: 例文と話しことば
-        Few-shot+書きことばリスト
-        Few-shot+話しことば例+書きことばリスト
-        プロンプト調整
-    4. 改良プロンプトによる話しことば検出
+\section{専門家による判定}
+\ref{c7s4}節の結果のうち，話しことばチェッカーで話しことばではないと判定された表現を専門家に判定してもらった．総数は重複を含め21件である．判定項目は(1)話しことばである，(2)グレーゾーン(主観的または客観的)，(3)グレーゾーン(判定不能)，(4)話しことばではないの4項目である．判定結果を表\ref{bunruikekka}に示す．左列が該当の表現，中央はその表現が含まれている文章，右列は専門家による判定である．
 
-    第５章追記準備
-    第７章用整理
-\end{comment}
+\begin{table}[H]
+	\centering
+        \caption{専門家の判定結果}
+ 	\includegraphics[width=150mm]{image/result-bunruikekka.png}
+	\label{bunruikekka}
+\end{table}
 
-\begin{comment}
-    本章では，話しことば検出におけるLLMの性能調査を行い，
-    LLMの話しことばの理解と，データ収集における利用可能性について模索する．
-
-    構成...？
-    実験内容→プロンプト→結果→考察
-
-    
-\end{comment}
-
-\begin{comment}
-本実験で用いたデータは，本学で2019年度に開講された「アルゴリズムとプログラミング」の講義内で課されたレポートから16件のレポート本文である．本章で述べる検証では一律でこのデータを使用した．
-    (1. GPT-4による話しことば検出)
-    プロンプトに，話しことばを検出
-    2. 短文とその時の話しことば検出結果の組を1つの例とし，プロンプトの例示の部分に組み込んだものを使用し話しことば検出を行った．この時に使用した短文は，話しことば事例集から抜粋したものである．
-    3. 明らかに書きことばとされる表現を挿入した
-    4. 2に例示の形式を変更し加えたものを与えた
-    5. 上記の結果を踏まえ，プロンプトの文言を編集した
-    6. 専門家による判定
-\end{comment}
+判定の結果は，話しことばであるものが2件，グレーゾーンであるものが計7件，話しことばではなかったものが12件となり，新規の話しことばが見つかったが，半数は話しことばではない結果となった．

@@ -1,4 +1,4 @@
-\documentclass[12pt, a4j]{ujreport} % a4jでもOKっぽい
+\documentclass[12pt, a4paper]{ujreport} % a4jでもOKっぽい
 
 %% ----- packages ----- %%
 % --- 図表 --- %
@@ -75,26 +75,18 @@ Research on Construction Support of Teacher Labels Toward the Discrimination of 
 m2220180 新井田 響}
 \date{\today}
 \maketitle
-
 \tableofcontents
-\thispagestyle{empty}
+%\thispagestyle{empty}
 
 \input{chapter/chapter-1} % 背景目的
 \input{chapter/chapter-2} % 先行研究位置づけ
-\input{chapter/chapter-3} % 
+\input{chapter/chapter-3} % 話しことばチェッカー
 \input{chapter/chapter-4} % 機械学習
-\input{chapter/chapter-5} % 検証？
-\input{chapter/chapter-6} % 
-\input{chapter/chapter-7-v2}
-\input{chapter/chapter-8}
-\input{chapter/chapter-reference}
-\input{chapter/chapter-thx}
-
-\begin{comment}
-label命名規則
-1. c[n] : 第n章のラベル
-2. c[m]s[n] : 第m章第n節のラベル
-\end{comment}
-
+\input{chapter/chapter-5} % データ収集の課題
+\input{chapter/chapter-6} % LLMと主観客観判定
+\input{chapter/chapter-7} % LLMと話しことば検出
+\input{chapter/chapter-8} % 結論
+\input{chapter/chapter-reference} % 参考文献
+\input{chapter/chapter-thx} % 謝辞
 
 \end{document}
