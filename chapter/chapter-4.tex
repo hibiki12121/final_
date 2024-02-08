@@ -39,7 +39,7 @@
 正解率(Accuracy)は，二値分類タスクの評価指標の一つであり，全体の分類結果のうち正答した割合を示す値である．正解率の定義を次式に示す．
 
 $$
-Accuracy = \frac{TP+FN}{TP+TN+FP+FN}
+\text{Accuracy} = \frac{\text{TP}+\text{FN}}{\text{TP}+\text{TN}+\text{FP}+\text{FN}}
 $$
 
 
@@ -47,24 +47,22 @@ $$
 適合率は(Precision)は，二値分類タスクにおける評価指標の一つであり，学習モデルが正と予測したもののうち，実際に正であものの割合を示す値である．適合率の定義を次式に示す．
 
 $$
-Precision = \frac{TP}{TP+FP}
+\text{Precision} = \frac{\text{TP}}{\text{TP}+\text{FP}}
 $$
-
 
 \subsubsection{再現率 \label{c4s2-1c}}
 再現率(Recall)は，二値分類タスクの評価指標の一つれあり，実際のデータに含まれる正クラス全体のうち，学習モデルが正と予測したものの割合を示す値である．再現率の定義を次式に示す．
 
 $$
-Recall = \frac{TP}{TP+FN}
+\text{Recall} = \frac{\text{TP}}{\text{TP}+\text{FN}}
 $$
 
 \subsubsection{F1値 (F1-score, F-measure) \label{c4s2-1d}}
 F1値は，二値分類タスクの一つであり，適合率と再現率の調和平均で算出される値である．適合率と再現率の関係はトレードオフの関係であるため，適合率と再現率の間に差が生じる場合がある．この場合，精度が良いとは一概には判断できない．そのため，これら2つの調和平均を算出し，精度に対し2値のバランスを判断するために用いられる．
 
 $$
-F1 = \frac{2 \times Recall \times Precision}{Recall+Precision}
+\text{F1} = \frac{2 \times \text{Recall} \times \text{Precision}}{\text{Recall}+\text{Precision}}
 $$
-
 
 \section{Attention \label{c4s3}}
 Attention は，Transformer の中枢を担う仕組みである．
@@ -83,23 +81,21 @@ ${Q}$，${K}$, ${V}$は異なるデータから得られた値を使用する(${
 入力文に対応する出力文が出力されるように学習を行う．
 
 以上の Attention を基本とし，Transformers では Scaled Dot-Product Attention と Multi-Head Attentionが実装されている．
-その仕組みを図aaa，図aaaに示す．
+その仕組みを図\ref{mha}，図\ref{sda}に示す．
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=80mm]{image/transformer-multi-head-attention.png}
-	\caption{Multi-Head Attentionの構造}
+	\caption{Multi-Head Attentionの構造(\cite{bert}より引用)}
 	\label{mha}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=80mm]{image/transformer-scaled-dot-product-attention.png}
-	\caption{Scaled Dot-Product Attentionの構造}
+	\caption{Scaled Dot-Product Attentionの構造(\cite{bert}より引用)}
 	\label{sda}
 \end{figure}
-
-% 	${Q}$ ${K}$ ${V}$
 
 \subsubsection{Scaled Dot-Product Attention}
  ${Q}$に対応する${K}$を探し，その${K}$を元にして対応する${V}$を取得する．
@@ -109,7 +105,7 @@ ${Q}$，${K}$, ${V}$は異なるデータから得られた値を使用する(${
 図 3.5 の数式を式(\ref{attention})に，softmax 関数を式(\ref{softmax})に示す．
 
 \begin{equation}
-    \mbox{Attention}(Q,K,V) = \mbox{softmax}\left( \frac{QK^T}{\sqrt{d_k}}\right)
+    \text{Attention}(Q,K,V) = \text{softmax}\left( \frac{QK^T}{\sqrt{d_k}}\right)
     \label{attention}
 \end{equation}
 
@@ -124,7 +120,7 @@ ${QK^T}$の値は次元数に比例して大きくなり，勾配は小さくな
 
 \begin{equation}
     \label{dk}
-    d_k = \frac{Q\mbox{の次元数}}{\mbox{Multi-Head Attention のHead数}}
+    d_k = \frac{Q\text{の次元数}}{\text{Multi-Head Attention のHead数}}
 \end{equation}
 
 \subsubsection{Multi-Head Attention}
@@ -137,12 +133,12 @@ Transformer とは，再帰型ニューラルネットワーク (以下，RNN) �
 RNN は，単語が連続し順序が重要となるような時系列情報を扱うのに最適であるが，逐次的に処理を行うため，処理に多くの時間を必要とする．
 また，離れた位置にある文，単語の依存関係をとらえることが難しいといった問題がある．
 Transformerは以上のような問題点を克服したモデルである．
-Transformerの構造を図aaaに示す．
+Transformerの構造を図\ref{transformer}に示す．
 
 \begin{figure}[H]%3.3
 	\centering
-	\includegraphics[width=130mm]{image/transformer.png}
-	\caption{Transformerの構造}
+	\includegraphics[width=110mm]{image/transformer.png}
+	\caption{Transformerの構造(\cite{attention}より引用)}
 	\label{transformer}
 \end{figure}
 
